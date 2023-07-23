@@ -2,15 +2,25 @@ import { updateUserValidation } from "../helpers/updateUserValidation.js";
 import { validateUser } from "../helpers/userValidation.js";
 import { User } from "../models/User.js"
 
-export const getAllUsers = (async(req,res)=>{
+export const getAllUsers = async (req, res) => {
     try {
-        const allUsers =  await User.find({});
-        res.status(201).json({users:allUsers});  
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10; 
+      const options = {
+        page,
+        limit,
+        sort: { createdAt: -1 },
+      };
+  
+      const result = await User.paginate({}, options);
+  
+      res.status(200).json(result);
     } catch (error) {
-        res.status(500).json({err:error})
+      res.status(500).json({ error: 'Error fetching users' });
     }
-})
+  };
 
+  
 export const createUser = (async(req,res)=>{
     try {
         const {error,value} = validateUser(req.body);

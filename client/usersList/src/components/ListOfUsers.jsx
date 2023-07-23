@@ -11,14 +11,25 @@ import Swal from 'sweetalert2';
 
 const ListOfUsers = () => {
     const [users, setUsers] = useState([]);
-    
-    
-    useEffect(() => {
-        getUsers().then((user) => {
-            setUsers(user?.data?.users)
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [limit, setLimit] = useState(10);
 
-        })
-    }, [])
+    useEffect(() => {
+        fetchUsers();
+    }, [page, limit]);
+
+    const fetchUsers = () => {
+        getUsers(page, limit)
+            .then((data) => {
+                setUsers(data?.docs);
+                setTotalPages(data?.totalPages);
+            })
+            .catch((error) => {
+                console.error('Error fetching users:', error);
+            });
+    };
+
 
     const formatDate = (dateString) => {
         const options = {
@@ -58,6 +69,18 @@ const ListOfUsers = () => {
 
         } catch (error) {
             toast.error('User deletion failed');
+        }
+    };
+
+    const handlePrevClick = () => {
+        if (page > 1) {
+            setPage((prevPage) => prevPage - 1);
+        }
+    };
+
+    const handleNextClick = () => {
+        if (page < totalPages) {
+            setPage((prevPage) => prevPage + 1);
         }
     };
 
@@ -146,19 +169,24 @@ const ListOfUsers = () => {
 
                                     </tbody>
                                 </table>
-                                <div
-                                    className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-                                    <div className="inline-flex mt-2 xs:mt-0">
-                                        <button
-                                            className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
-                                            Prev
-                                        </button>
-                                        <button
-                                            className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
-                                            Next
-                                        </button>
-                                    </div>
-                                </div>
+                                <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                <div className="inline-flex mt-2 xs:mt-0">
+                    <button
+                        className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l"
+                        onClick={handlePrevClick}
+                        disabled={page === 1}
+                    >
+                        Prev
+                    </button>
+                    <button
+                        className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r"
+                        onClick={handleNextClick}
+                        disabled={page === totalPages}
+                    >
+                        Next
+                    </button>
+                </div>
+            </div>
                             </div>
                         </div>
                     </div>
