@@ -14,6 +14,7 @@ const ListOfUsers = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [limit, setLimit] = useState(10);
+    
 
     useEffect(() => {
         fetchUsers();
@@ -57,7 +58,8 @@ const ListOfUsers = () => {
                     toast.success('User deleted successfully');
                     getUsers()
                         .then((user) => {
-                            setUsers(user?.data?.users);
+                            console.log(user?.docs)
+                            setUsers(user?.docs);
                         })
                         .catch((error) => {
                             console.error('Error fetching users:', error);
@@ -94,7 +96,7 @@ const ListOfUsers = () => {
                         <div>
                             <h2 className="text-lg font-semibold leading-tight">Users</h2>
                         </div>
-                        <div className="my-2 flex sm:flex-row flex-col">
+                        {/* <div className="my-2 flex sm:flex-row flex-col">
                             <div className="block relative">
                                 <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                                     <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current text-gray-500">
@@ -106,7 +108,7 @@ const ListOfUsers = () => {
                                 <input placeholder="Search"
                                     className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none" />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                             <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                                 <table className="min-w-full leading-normal">

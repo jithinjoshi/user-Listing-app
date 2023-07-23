@@ -20,7 +20,9 @@ export const getAllUsers = async (req, res) => {
     }
   };
 
-  
+
+
+
 export const createUser = (async(req,res)=>{
     try {
         const {error,value} = validateUser(req.body);
